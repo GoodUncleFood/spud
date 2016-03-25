@@ -1,12 +1,15 @@
 ```
-.service('SelectPreviewDelete', function() {
+.service('SPUD', function() {
 
-  let makeFileSelector = function(dataObject, scope) {
-    let fileSelector = function(selector, imageId) {
+  let make = function(selectorId, imageId, dataObject, scope) {
+
+    let selector = document.getElementById(selectorId);
+    let image = document.getElementById(imageId);
+
+    let select = function() {
       let reader = new FileReader();
       reader.onload = function(event) {
         let dataURL = reader.result;
-        let image = document.getElementById(imageId);
         image.src = dataURL;
         dataObject.data = dataURL;
         scope.$apply();
@@ -15,24 +18,23 @@
       let file = selector.files[0];
       reader.readAsDataURL(file);
     };
-    return fileSelector;
-  };
 
-  let makeFileDeletor = function(dataObject) {
-    let fileDeletor = function(selectorId, imageId) {
-      let selector = document.getElementById(selectorId);
+    let discard = function() {
       selector.value = '';
-      let image = document.getElementById(imageId);
       image.src = '';
       dataObject.data = undefined;
       dataObject.fileName = undefined;
     };
-    return fileDeletor;
+
+    return {
+      select: select,
+      discard: discard,
+    };
+
   };
 
   return {
-    makeFileSelector: makeFileSelector,
-    makeFileDeletor: makeFileDeletor,
+    make: make,
   };
 
 })
