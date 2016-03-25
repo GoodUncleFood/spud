@@ -2,15 +2,19 @@
 .service('SPUD', function() {
 
   let make = function(selectorId, imageId, dataObject, scope) {
-
     let selector = document.getElementById(selectorId);
-    let image = document.getElementById(imageId);
+    let image;
+    if (imageId) {
+      image = document.getElementById(imageId);
+    }
 
     let select = function() {
       let reader = new FileReader();
       reader.onload = function(event) {
         let dataURL = reader.result;
-        image.src = dataURL;
+        if (image) {
+          image.src = dataURL;
+        }
         dataObject.data = dataURL;
         scope.$apply();
       };
@@ -21,7 +25,9 @@
 
     let discard = function() {
       selector.value = '';
-      image.src = '';
+      if (image) {
+        image.src = '';
+      }
       dataObject.data = undefined;
       dataObject.fileName = undefined;
     };
@@ -37,5 +43,5 @@
     make: make,
   };
 
-})
+});
 ```
